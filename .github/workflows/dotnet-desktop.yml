@@ -4,36 +4,6 @@ on:
   push:
     branches: [ "master" ]
     tags:
-      - 'v*'
-  workflow_dispatch:
-
-# Añade esta sección de permisos
-permissions:
-  contents: write  # Esto da permiso para crear releases
-
-jobs:
-  build:
-    runs-on: windows-latest
-    
-    steps:
-    # ... los pasos existentes ...
-    
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: WpfAction.zip
-        draft: false
-        prerelease: false
-      # Nota: Ya no necesitas especificar GITHUB_TOKEN en el env
-
-
-name: Build and Publish WPF Application
-
-on:
-  push:
-    branches: [ "master" ]
-    tags:
       - 'v*'  # Activar el workflow cuando se cree un tag que comience con 'v'
   workflow_dispatch:
 
