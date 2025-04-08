@@ -3,9 +3,9 @@ name: Build and Publish WPF Application
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  workflow_dispatch:  # Permite ejecutar el workflow manualmente desde la interfaz de GitHub
+    tags:
+      - 'v*'  # Activar el workflow cuando se cree un tag que comience con 'v'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -29,9 +29,27 @@ jobs:
     - name: Publish
       run: dotnet publish WpfAction/WpfAction.csproj -c Release -o publish --self-contained true -r win-x64 /p:PublishSingleFile=true
       
+    # Comprimir los archivos publicados
+    - name: Zip the published files
+      run: |
+        cd publish
+        Compress-Archive -Path * -DestinationPath ../WpfAction.zip
+      shell: pwsh
+      
+    # Crear una release cuando se empuje un tag
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: WpfAction.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    # También subir como artefacto para builds no taggeados
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: WpfAction-Release
         path: publish/
-        retention-days: 30  # Los artefactos se guardarán por 30 días
