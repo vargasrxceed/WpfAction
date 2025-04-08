@@ -21,13 +21,13 @@ jobs:
         dotnet-version: 9.0.x
         
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore WpfAction/WpfAction.csproj
       
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build WpfAction/WpfAction.csproj --configuration Release --no-restore
       
     - name: Publish
-      run: dotnet publish WpfAction.csproj -c Release -o publish --self-contained true -r win-x64 /p:PublishSingleFile=true
+      run: dotnet publish WpfAction/WpfAction.csproj -c Release -o publish --self-contained true -r win-x64 /p:PublishSingleFile=true
       
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
