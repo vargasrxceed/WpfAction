@@ -16,15 +16,16 @@ namespace WpfAction
   /// </summary>
   public partial class MainWindow : Window
   {
+    public const string licenseKey = "LICENSE_KEY_PLACEHOLDER";
     public MainWindow()
     {
       InitializeComponent();
-      string license = "LICENSE_KEY_PLACEHOLDER";
+      //string license = "LICENSE_KEY_PLACEHOLDER";
     }
 
     private void Button_Click( object sender, RoutedEventArgs e )
     {
-      MessageBox.Show( "Hello, World!" );
+      MessageBox.Show(licenseKey);
     }
   }
 }
