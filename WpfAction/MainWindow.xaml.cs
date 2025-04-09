@@ -19,6 +19,7 @@ namespace WpfAction
     public MainWindow()
     {
       InitializeComponent();
+      string license = "LICENSE_KEY_PLACEHOLDER";
     }
 
     private void Button_Click( object sender, RoutedEventArgs e )

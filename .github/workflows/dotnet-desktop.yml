@@ -1,12 +1,10 @@
 name: Build and Publish WPF Application
-
 on:
   push:
     branches: [ "master" ]
     tags:
       - 'v*'  # Activar el workflow cuando se cree un tag que comience con 'v'
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: windows-latest
@@ -22,6 +20,16 @@ jobs:
         
     - name: Restore dependencies
       run: dotnet restore WpfAction/WpfAction.csproj
+    
+    # Nuevo paso para reemplazar el placeholder de licencia con el secreto
+    - name: Replace License Key
+      run: |
+        $content = Get-Content -Path .\WpfAction\MainWindow.xaml.cs -Raw
+        $content = $content -replace 'LICENSE_KEY_PLACEHOLDER', '${{ secrets.LICENSE_KEY }}'
+        # O si mantienes la cadena original, reemplázala directamente:
+        # $content = $content -replace '"FFF999-EE4RT-WWWER-33GSW"', '"${{ secrets.LICENSE_KEY }}"'
+        Set-Content -Path .\WpfAction\MainWindow.xaml.cs -Value $content
+      shell: pwsh
       
     - name: Build
       run: dotnet build WpfAction/WpfAction.csproj --configuration Release --no-restore
